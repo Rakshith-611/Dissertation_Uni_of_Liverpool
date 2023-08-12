@@ -1,1 +1,2 @@
-# Dissertation_Uni_of_Liverpool
+# The AI behind Nine Men's Morris
+#### By Rakshith N.
