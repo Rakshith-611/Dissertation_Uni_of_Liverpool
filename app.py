@@ -1,6 +1,7 @@
 import pygame
 import sys
 import nmm
+import time
 
 pygame.init()
 size = width, height = 600, 600
@@ -10,7 +11,7 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 wood = (97, 54, 19)
 yellow = (255, 215, 0)
-gold = (218,165,32)
+gold = (218, 165, 32)
 pecan = (72, 38, 13)
 
 # font size
@@ -50,6 +51,7 @@ while True:
         buttonWidth = width / 2
         button_height = 50
         button_x = (width - buttonWidth) / 2
+        # button_y = ...
 
         # draw buttons
         beginnerButton = pygame.Rect(button_x, 300, buttonWidth, button_height)
@@ -65,6 +67,18 @@ while True:
         playIntermediateRect.center = intermediateButton.center
         pygame.draw.rect(screen, pecan, intermediateButton)
         screen.blit(playIntermediate, playIntermediateRect)
+
+        # check if button is clicked
+        click, _, _ = pygame.mouse.get_pressed()
+        if click == 1:
+            mouse = pygame.mouse.get_pos()
+            if beginnerButton.collidepoint(mouse):
+                time.sleep(0.2)
+                difficulty = nmm.BEGINNER
+            elif intermediateButton.collidepoint(mouse):
+                time.sleep(0.2)
+                difficulty = nmm.INTERMEDIATE
+
 
     else:
         ...

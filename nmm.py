@@ -4,6 +4,9 @@ Nine Men's Morris Player
 
 from copy import deepcopy
 
+BEGINNER = "beginner"
+INTERMEDIATE = "intermediate"
+
 
 def initial_state():
     """
