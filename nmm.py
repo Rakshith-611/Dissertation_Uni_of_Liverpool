@@ -3,6 +3,7 @@ Nine Men's Morris Player
 """
 
 from copy import deepcopy
+import numpy
 
 BEGINNER = "beginner"
 INTERMEDIATE = "intermediate"

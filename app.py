@@ -32,7 +32,7 @@ while True:
 
     screen.fill(wood)
 
-    # get the ai depth
+    # get the ai depth (Landing Page)
     if difficulty is None:
 
         # display title
@@ -79,8 +79,12 @@ while True:
                 time.sleep(0.2)
                 difficulty = nmm.INTERMEDIATE
 
-
+    # Gameplay page
     else:
-        ...
+        # display the game board
+        board_surface = pygame.image.load("Graphics/gameboard2.jpg").convert_alpha()
+        board_surface = pygame.transform.scale(board_surface, (400,400))
+        board_rect = board_surface.get_rect(center = (300,300))
+        screen.blit(board_surface, board_rect)
 
     pygame.display.flip()
