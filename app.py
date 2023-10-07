@@ -40,7 +40,7 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
 
-    if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
 
             for i, intersection in enumerate(intersections):
