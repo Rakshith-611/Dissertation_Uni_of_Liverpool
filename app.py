@@ -22,7 +22,17 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 screen = pygame.display.set_mode(size)
 
 board = nmm.initial_state()
+# Calculated intersection positions
+intersections = [(130, 130), (300, 130), (470, 130),
+                 (192, 192), (300, 192), (408, 192),
+                 (250, 250), (300, 250), (352, 250),
+                 (130, 300), (192, 300), (250, 300), (352, 300), (408, 300), (470, 300),
+                 (250, 352), (300, 352), (350, 352),
+                 (192, 408), (300, 408), (408, 408),
+                 (130, 470), (300, 470), (470, 470)]
+
 difficulty = None
+player = 1
 
 while True:
 
@@ -82,9 +92,13 @@ while True:
     # Gameplay page
     else:
         # display the game board
-        board_surface = pygame.image.load("Graphics/gameboard2.jpg").convert_alpha()
+        board_surface = pygame.image.load("Graphics/gameboard.jpg").convert_alpha()
         board_surface = pygame.transform.scale(board_surface, (400,400))
         board_rect = board_surface.get_rect(center = (300,300))
         screen.blit(board_surface, board_rect)
+
+        # add playable positions
+        for intersection in intersections:
+            pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
 
     pygame.display.flip()
