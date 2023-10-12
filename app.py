@@ -34,13 +34,16 @@ intersections = [(130, 130), (300, 130), (470, 130),
 difficulty = None
 player = 1
 
+# activation for gameplay screen interactive elements
+gameplay_active = False
+
 while True:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if gameplay_active and event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
 
             for i, intersection in enumerate(intersections):
@@ -99,6 +102,9 @@ while True:
 
     # Gameplay page
     else:
+
+        gameplay_active = True
+        
         # display the game board
         board_surface = pygame.image.load("Graphics/gameboard.jpg").convert_alpha()
         board_surface = pygame.transform.scale(board_surface, (400,400))
@@ -108,5 +114,12 @@ while True:
         # add playable positions
         for intersection in intersections:
             pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
+
+        game_over = nmm.terminal(board=board)
+
+        # add user input
+        click, _, _ = pygame.mouse.get_pressed()
+        if click == 1 and player == 1 and not game_over:
+            ...
 
     pygame.display.flip()
