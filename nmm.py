@@ -26,6 +26,20 @@ def initial_state():
             ["$", EMPTY, "$", EMPTY, "$", EMPTY, "$"],
             [EMPTY, "$", "$", EMPTY, "$", "$", EMPTY]
             ]
+
+
+def board_positions(board):
+    """
+    Returns a dictionary of the form {intersection: (index, value)}
+    """
+    # get the elements in each position of the board
+    positions = []
+    for index, cell in np.ndenumerate(np.array(board)):
+        if cell != "$":
+            positions.append([index, cell])
+    
+    # pair the positions to the intersection points
+    return {i+1: position for i, position in enumerate(positions)}
             
 
 def result(board, action, player):
@@ -36,16 +50,7 @@ def result(board, action, player):
     """
     newBoard = deepcopy(board)
 
-    # get the elements in each position of the board
-    positions = []
-    for index, cell in np.ndenumerate(np.array(newBoard)):
-        if cell != "$":
-            positions.append([index, cell])
-    
-    # pair the positions to the intersection points
-    linkages = {i+1: position for i, position in enumerate(positions)}
-    
-    i, j = linkages[action][0]
+    i, j = board_positions(newBoard)[action][0]
 
     if newBoard[i][j] != EMPTY:
         raise Exception("not a valid move")
@@ -55,6 +60,7 @@ def result(board, action, player):
     
     # return the new board state and the next player
     return newBoard, new_player
+#print(result(initial_state(), 2, 1))
 
 
 def terminal(board):
