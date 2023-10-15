@@ -43,14 +43,6 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
 
-        # if gameplay_active and event.type == pygame.MOUSEBUTTONDOWN:
-        #     mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        #     for i, intersection in enumerate(intersections):
-        #         intersection_rect = pygame.Rect(intersection[0]-14, intersection[1]-14, 28, 28)  # Create Rect around intersection
-        #         if intersection_rect.collidepoint(mouse_x, mouse_y):
-        #             print(f"Mouse clicked on intersection {i+1}")
-
     screen.fill(wood)
 
     # get the ai depth (Landing Page)
@@ -112,20 +104,10 @@ while True:
         screen.blit(board_surface, board_rect)
 
         # add playable positions
-        # for intersection in intersections:
-        #     pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
         for intersection in intersections:
             pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
 
         game_over = nmm.terminal(board=board)
-
-        # if gameplay_active and event.type == pygame.MOUSEBUTTONDOWN:
-        #     mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        #     for i, intersection in enumerate(intersections):
-        #         intersection_rect = pygame.Rect(intersection[0]-14, intersection[1]-14, 28, 28)  # Create Rect around intersection
-        #         if intersection_rect.collidepoint(mouse_x, mouse_y):
-        #             print(f"Mouse clicked on intersection {i+1}")
 
         # add user input
         click, _, _ = pygame.mouse.get_pressed()
