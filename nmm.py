@@ -51,8 +51,7 @@ def result(board, action, player):
     """
     newBoard = deepcopy(board)
 
-    i, j = board_positions(newBoard)[action][0]
-    i, j = board_positions(newBoard)[action][0]
+    i, j = action
 
     if newBoard[i][j] != EMPTY:
         raise Exception("not a valid move")

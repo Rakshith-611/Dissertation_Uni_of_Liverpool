@@ -136,8 +136,9 @@ while True:
             mouse = pygame.mouse.get_pos()
             for position in positions:
                 if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
+                    action = positions[position][0]
                     print(f"Mouse clicked on position {position}")
-                    board, player = nmm.result(board, position, player)
+                    board, player = nmm.result(board, action, player)
 
 
     pygame.display.flip()
