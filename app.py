@@ -22,6 +22,14 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 screen = pygame.display.set_mode(size)
 
 board = nmm.initial_state()
+board =     [[nmm.USER, "$", "$", nmm.EMPTY, "$", "$", nmm.AI],
+            ["$", nmm.USER, "$", nmm.EMPTY, "$", nmm.AI, "$"],
+            ["$", "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", "$"],
+            [nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY],
+            ["$", "$", nmm.EMPTY, nmm.USER, nmm.EMPTY, "$", "$"],
+            ["$", nmm.AI, "$", nmm.EMPTY, "$", nmm.EMPTY, "$"],
+            [nmm.EMPTY, "$", "$", nmm.USER, "$", "$", nmm.AI]
+            ]
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
@@ -96,27 +104,44 @@ while True:
     else:
 
         gameplay_active = True
-        
+        positions = nmm.board_positions(board=board)
+
         # display the game board
         board_surface = pygame.image.load("Graphics/gameboard.jpg").convert_alpha()
         board_surface = pygame.transform.scale(board_surface, (400,400))
         board_rect = board_surface.get_rect(center = (300,300))
         screen.blit(board_surface, board_rect)
 
+
         # add playable positions
-        for intersection in intersections:
-            pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
+        tiles = {}
+        for position, intersection in enumerate(intersections):
+            intersection_rect = pygame.Rect(intersection[0]-14, intersection[1]-14, 28, 28)
+            tiles[position + 1] = intersection_rect
+
+            if positions[position+1][1] != nmm.EMPTY:
+                if positions[position+1][1] == nmm.USER:
+                    pygame.draw.circle(surface=screen, color=white, center=intersection, radius=14)
+                elif positions[position+1][1] == nmm.AI:
+                    pygame.draw.circle(surface=screen, color=black, center=intersection, radius=14)
+            else:
+                pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
+
 
         game_over = nmm.terminal(board=board)
 
         # add user input
         click, _, _ = pygame.mouse.get_pressed()
-        if click and player == 1:# and not game_over:
+        if click and player == 1 and not game_over:
             mouse = pygame.mouse.get_pos()
-            for i, intersection in enumerate(intersections):
-                intersection_rect = pygame.Rect(intersection[0]-14, intersection[1]-14, 28, 28)
-                if intersection_rect.collidepoint(mouse):
-                    print(f"Mouse clicked on intersection {i+1}")
-                    move = i+1
+            for position in positions:
+                if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
+                    print(f"mouse clicked on position {position}")
+            # for i, intersection in enumerate(intersections):
+            #     ...
+                # intersection_rect = pygame.Rect(intersection[0]-14, intersection[1]-14, 28, 28)
+                # if intersection_rect.collidepoint(mouse):
+                #     print(f"Mouse clicked on intersection {i+1}")
+                #     move = i+1
 
     pygame.display.flip()
