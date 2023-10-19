@@ -130,18 +130,14 @@ while True:
 
         game_over = nmm.terminal(board=board)
 
-        # add user input
+        # check for user move
         click, _, _ = pygame.mouse.get_pressed()
         if click and player == 1 and not game_over:
             mouse = pygame.mouse.get_pos()
             for position in positions:
                 if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
-                    print(f"mouse clicked on position {position}")
-            # for i, intersection in enumerate(intersections):
-            #     ...
-                # intersection_rect = pygame.Rect(intersection[0]-14, intersection[1]-14, 28, 28)
-                # if intersection_rect.collidepoint(mouse):
-                #     print(f"Mouse clicked on intersection {i+1}")
-                #     move = i+1
+                    print(f"Mouse clicked on position {position}")
+                    board, player = nmm.result(board, position, player)
+
 
     pygame.display.flip()

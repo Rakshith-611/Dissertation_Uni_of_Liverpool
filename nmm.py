@@ -62,8 +62,6 @@ def result(board, action, player):
     
     # return the new board state and the next player
     return newBoard, new_player
-#print(result(initial_state(), 2, 1))
-#print(result(initial_state(), 2, 1))
 
 
 def terminal(board):
