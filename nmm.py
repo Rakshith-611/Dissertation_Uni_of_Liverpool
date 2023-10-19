@@ -28,6 +28,7 @@ def initial_state():
             ]
 
 
+
 def board_positions(board):
     """
     Returns a dictionary of the form {intersection: (index, value)}
@@ -51,6 +52,7 @@ def result(board, action, player):
     newBoard = deepcopy(board)
 
     i, j = board_positions(newBoard)[action][0]
+    i, j = board_positions(newBoard)[action][0]
 
     if newBoard[i][j] != EMPTY:
         raise Exception("not a valid move")
@@ -60,6 +62,7 @@ def result(board, action, player):
     
     # return the new board state and the next player
     return newBoard, new_player
+#print(result(initial_state(), 2, 1))
 #print(result(initial_state(), 2, 1))
 
 
