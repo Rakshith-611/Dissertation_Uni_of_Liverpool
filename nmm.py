@@ -28,7 +28,6 @@ def initial_state():
             ]
 
 
-
 def board_positions(board):
     """
     Returns a dictionary of the form {intersection: (index, value)}

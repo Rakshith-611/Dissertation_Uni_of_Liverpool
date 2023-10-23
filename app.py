@@ -40,7 +40,9 @@ intersections = [(130, 130), (300, 130), (470, 130),
                  (130, 470), (300, 470), (470, 470)]
 
 difficulty = None
-player = 1
+PLAYER = 1
+USER_PIECES = 9
+AI_PIECES = 9
 
 # activation for gameplay screen interactive elements
 gameplay_active = False
@@ -127,18 +129,63 @@ while True:
             else:
                 pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
 
-
         game_over = nmm.terminal(board=board)
+
+        # gameplay titles
+        if game_over:
+            winner = None
+            if winner is None:
+                title = "Game Over: TIE."
+            elif winner == nmm.USER:
+                title = "Game Over: You WIN!"
+            else:
+                title = "Game Over: You lose :("
+
+            againButton = pygame.Rect(200, 525, 200, 50)
+            again = mediumFont.render("Play Again?", True, yellow)
+            againRect = again.get_rect()
+            againRect.center = againButton.center
+            pygame.draw.rect(screen, pecan, againButton)
+            screen.blit(again, againRect)
+            click, _, _ = pygame.mouse.get_pressed()
+            if click == 1:
+                mouse = pygame.mouse.get_pos()
+                if againButton.collidepoint(mouse):
+                    difficulty = None
+                    PLAYER = 1
+                    board = nmm.initial_state()
+        else:
+            if PLAYER == nmm.USER:
+                title = "Your turn."
+            else:
+                title = "Computer thinking..."
+
+            user_pieces = largeFont.render(str(USER_PIECES), True, white)
+            user_piecesRect = user_pieces.get_rect()
+            user_piecesRect.center = (50, 300)
+            screen.blit(user_pieces, user_piecesRect)
+
+            ai_pieces = largeFont.render(str(AI_PIECES), True, black)
+            ai_piecesRect = ai_pieces.get_rect()
+            ai_piecesRect.center = (550, 300)
+            screen.blit(ai_pieces, ai_piecesRect)
+        
+        title = largeFont.render(title, True, gold)
+        titleRect = title.get_rect()
+        titleRect.center = (300, 50)
+        screen.blit(title, titleRect)
+
 
         # check for user move
         click, _, _ = pygame.mouse.get_pressed()
-        if click and player == 1 and not game_over:
+        if click and PLAYER == 1 and not game_over:
             mouse = pygame.mouse.get_pos()
             for position in positions:
                 if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
                     action = positions[position][0]
                     print(f"Mouse clicked on position {position}")
-                    board, player = nmm.result(board, action, player)
+                    board, PLAYER = nmm.result(board, action, PLAYER)
+                    USER_PIECES -= 1
 
 
     pygame.display.flip()
