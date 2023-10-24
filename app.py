@@ -22,14 +22,14 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 screen = pygame.display.set_mode(size)
 
 board = nmm.initial_state()
-board =     [[nmm.USER, "$", "$", nmm.EMPTY, "$", "$", nmm.AI],
-            ["$", nmm.USER, "$", nmm.EMPTY, "$", nmm.AI, "$"],
-            ["$", "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", "$"],
-            [nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY],
-            ["$", "$", nmm.EMPTY, nmm.USER, nmm.EMPTY, "$", "$"],
-            ["$", nmm.AI, "$", nmm.EMPTY, "$", nmm.EMPTY, "$"],
-            [nmm.EMPTY, "$", "$", nmm.USER, "$", "$", nmm.AI]
-            ]
+# board =     [[nmm.USER, "$", "$", nmm.EMPTY, "$", "$", nmm.AI],
+#             ["$", nmm.USER, "$", nmm.EMPTY, "$", nmm.AI, "$"],
+#             ["$", "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", "$"],
+#             [nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY],
+#             ["$", "$", nmm.EMPTY, nmm.USER, nmm.EMPTY, "$", "$"],
+#             ["$", nmm.AI, "$", nmm.EMPTY, "$", nmm.EMPTY, "$"],
+#             [nmm.EMPTY, "$", "$", nmm.USER, "$", "$", nmm.AI]
+#             ]
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
@@ -129,7 +129,7 @@ while True:
             else:
                 pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
 
-        game_over = nmm.terminal(board=board)
+        game_over = nmm.terminal(board=board, user_pieces=USER_PIECES, ai_pieces=AI_PIECES)
 
         # gameplay titles
         if game_over:

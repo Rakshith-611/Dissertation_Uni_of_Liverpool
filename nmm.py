@@ -62,22 +62,35 @@ def result(board, action, player):
     return newBoard, new_player
 
 
-def terminal(board):
+def terminal(board, user_pieces, ai_pieces):
     """
     Returns true is the game is over, False otherwise
     """
-
-    # set player one and player 2 pieces count
-    p_1 = 0
-    p_2 = 0
-
-    for row in board:
-        for cell in row:
-            if cell == USER: p_1 += 1
-            elif cell == AI: p_2 += 1
     
-    # if either player has only two pieces left then it's game over
-    if p_1 < 3 or p_2 < 3:
-        return True
+    # if either the player or the ai still has pieces left to place, game not over
+    if user_pieces > 0 or ai_pieces > 0:
+        return False
+    
+    else:
+        # set player one and player 2 pieces count
+        p_1 = 0
+        p_2 = 0
+
+        for row in board:
+            for cell in row:
+                if cell == USER: p_1 += 1
+                elif cell == AI: p_2 += 1
+        
+        # if either player has only two pieces left then it's game over
+        if p_1 < 3 or p_2 < 3:
+            return True
     
     return False
+
+
+def main():
+    board = initial_state()
+
+
+if __name__ == "__main__":
+    main()
