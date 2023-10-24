@@ -4,6 +4,7 @@ Nine Men's Morris Player
 
 from copy import deepcopy
 import numpy as np
+import random
 
 BEGINNER = "beginner"
 INTERMEDIATE = "intermediate"
@@ -26,6 +27,16 @@ def initial_state():
             ["$", EMPTY, "$", EMPTY, "$", EMPTY, "$"],
             [EMPTY, "$", "$", EMPTY, "$", "$", EMPTY]
             ]
+
+
+def actions(board, difficulty):
+    """
+    Returns set of all possible actions (i, j) available on the board.
+    """
+
+    # initialize a set of all possible moves
+    moves = set()
+
 
 
 def board_positions(board):
@@ -62,6 +73,10 @@ def result(board, action, player):
     return newBoard, new_player
 
 
+def winner(board):
+    ...
+
+
 def terminal(board, user_pieces, ai_pieces):
     """
     Returns true is the game is over, False otherwise
@@ -88,8 +103,20 @@ def terminal(board, user_pieces, ai_pieces):
     return False
 
 
+def minimax(board, difficulty):
+    """
+    Returns the optimal action (i,j) for the AI.
+    """
+    # if difficulty == BEGINNER:
+    #     # print([value[0] for value in board_positions(initial_state()).values()])
+    #     choices = [value[0] for value in board_positions(board).values()]
+    #     return random.choice(choices)
+
+
 def main():
     board = initial_state()
+    # minimax(initial_state(), BEGINNER)
+    # print(minimax(initial_state(), BEGINNER))
 
 
 if __name__ == "__main__":

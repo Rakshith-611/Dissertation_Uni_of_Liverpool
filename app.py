@@ -2,6 +2,7 @@ import pygame
 import sys
 import nmm
 import time
+import random
 
 pygame.init()
 size = width, height = 600, 600
@@ -21,8 +22,8 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 
 screen = pygame.display.set_mode(size)
 
-board = nmm.initial_state()
-# board =     [[nmm.USER, "$", "$", nmm.EMPTY, "$", "$", nmm.AI],
+BOARD = nmm.initial_state()
+# BOARD =     [[nmm.USER, "$", "$", nmm.EMPTY, "$", "$", nmm.AI],
 #             ["$", nmm.USER, "$", nmm.EMPTY, "$", nmm.AI, "$"],
 #             ["$", "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", "$"],
 #             [nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY],
@@ -39,7 +40,7 @@ intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 408), (300, 408), (408, 408),
                  (130, 470), (300, 470), (470, 470)]
 
-difficulty = None
+DIFFICULTY = None
 PLAYER = 1
 USER_PIECES = 9
 AI_PIECES = 9
@@ -56,7 +57,7 @@ while True:
     screen.fill(wood)
 
     # get the ai depth (Landing Page)
-    if difficulty is None:
+    if DIFFICULTY is None:
 
         # display title
         title = largeFont.render("Nine Men's Morris", True, gold)
@@ -97,17 +98,20 @@ while True:
             mouse = pygame.mouse.get_pos()
             if beginnerButton.collidepoint(mouse):
                 time.sleep(0.2)
-                difficulty = nmm.BEGINNER
+                DIFFICULTY = nmm.BEGINNER
             elif intermediateButton.collidepoint(mouse):
                 time.sleep(0.2)
-                difficulty = nmm.INTERMEDIATE
+                DIFFICULTY = nmm.INTERMEDIATE
 
     # Gameplay page
     else:
 
         gameplay_active = True
-        positions = nmm.board_positions(board=board)
-
+        positions = nmm.board_positions(board=BOARD)
+        playable_positions = {position: [positions[position][0], positions[position][1]] 
+                              for position in positions 
+                              if positions[position][1] == nmm.EMPTY}
+        
         # display the game board
         board_surface = pygame.image.load("Graphics/gameboard.jpg").convert_alpha()
         board_surface = pygame.transform.scale(board_surface, (400,400))
@@ -129,7 +133,7 @@ while True:
             else:
                 pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
 
-        game_over = nmm.terminal(board=board, user_pieces=USER_PIECES, ai_pieces=AI_PIECES)
+        game_over = nmm.terminal(board=BOARD, user_pieces=USER_PIECES, ai_pieces=AI_PIECES)
 
         # gameplay titles
         if game_over:
@@ -151,9 +155,9 @@ while True:
             if click == 1:
                 mouse = pygame.mouse.get_pos()
                 if againButton.collidepoint(mouse):
-                    difficulty = None
+                    DIFFICULTY = None
                     PLAYER = 1
-                    board = nmm.initial_state()
+                    BOARD = nmm.initial_state()
         else:
             if PLAYER == nmm.USER:
                 title = "Your turn."
@@ -176,6 +180,17 @@ while True:
         screen.blit(title, titleRect)
 
 
+        # check for AI move
+        if PLAYER == 2 and not game_over:
+            # move = nmm.minimax(BOARD, DIFFICULTY)
+            print([value[0] for value in playable_positions.values()])
+            move = random.choice([value[0] for value in playable_positions.values()])
+            print(move)
+            BOARD, PLAYER = nmm.result(board=BOARD, action=move, player=PLAYER)
+            if AI_PIECES > 0:
+                AI_PIECES -= 1
+
+
         # check for user move
         click, _, _ = pygame.mouse.get_pressed()
         if click and PLAYER == 1 and not game_over:
@@ -184,8 +199,9 @@ while True:
                 if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
                     action = positions[position][0]
                     print(f"Mouse clicked on position {position}")
-                    board, PLAYER = nmm.result(board, action, PLAYER)
-                    USER_PIECES -= 1
+                    BOARD, PLAYER = nmm.result(BOARD, action, PLAYER)
+                    if USER_PIECES > 0:    
+                        USER_PIECES -= 1
 
 
     pygame.display.flip()
