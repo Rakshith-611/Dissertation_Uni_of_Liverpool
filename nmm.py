@@ -77,6 +77,23 @@ def winner(board):
     ...
 
 
+def remaining_pieces(board):
+    """
+    Returns the number of user and ai pieces still left on the board
+    """
+
+    # set user and ai piece count
+    user = 0
+    ai = 0
+
+    for row in board:
+        for cell in row:
+            if cell == USER: user += 1
+            elif cell == AI: ai += 1
+
+    return user, ai
+
+
 def terminal(board, user_pieces, ai_pieces):
     """
     Returns true is the game is over, False otherwise
@@ -87,14 +104,7 @@ def terminal(board, user_pieces, ai_pieces):
         return False
     
     else:
-        # set player one and player 2 pieces count
-        p_1 = 0
-        p_2 = 0
-
-        for row in board:
-            for cell in row:
-                if cell == USER: p_1 += 1
-                elif cell == AI: p_2 += 1
+        p_1, p_2 = remaining_pieces(board)
         
         # if either player has only two pieces left then it's game over
         if p_1 < 3 or p_2 < 3:

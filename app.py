@@ -135,6 +135,7 @@ while True:
 
         game_over = nmm.terminal(board=BOARD, user_pieces=USER_PIECES, ai_pieces=AI_PIECES)
 
+
         # gameplay titles
         if game_over:
             winner = None
@@ -194,14 +195,17 @@ while True:
         # check for user move
         click, _, _ = pygame.mouse.get_pressed()
         if click and PLAYER == 1 and not game_over:
-            mouse = pygame.mouse.get_pos()
-            for position in positions:
-                if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
-                    action = positions[position][0]
-                    print(f"Mouse clicked on position {position}")
-                    BOARD, PLAYER = nmm.result(BOARD, action, PLAYER)
-                    if USER_PIECES > 0:    
-                        USER_PIECES -= 1
+            if USER_PIECES > 0:
+                mouse = pygame.mouse.get_pos()
+                for position in positions:
+                    if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
+                        action = positions[position][0]
+                        print(f"Mouse clicked on position {position}")
+                        BOARD, PLAYER = nmm.result(BOARD, action, PLAYER)
+                        if USER_PIECES > 0:    
+                            USER_PIECES -= 1
+            else:
+                ...
 
 
     pygame.display.flip()
