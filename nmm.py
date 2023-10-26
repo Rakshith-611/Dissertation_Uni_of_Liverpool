@@ -94,14 +94,18 @@ def remaining_pieces(board):
     return user, ai
 
 
-def terminal(board, user_pieces, ai_pieces):
+def terminal(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     """
     Returns true is the game is over, False otherwise
     """
     
     # if either the player or the ai still has pieces left to place, game not over
+    # phase 1
     if user_pieces > 0 or ai_pieces > 0:
-        return False
+        if r_user_pieces > 1 or r_ai_pieces > 1:
+            return False
+        else:
+            return True
     
     else:
         p_1, p_2 = remaining_pieces(board)

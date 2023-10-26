@@ -42,8 +42,11 @@ intersections = [(130, 130), (300, 130), (470, 130),
 
 DIFFICULTY = None
 PLAYER = 1
+
 USER_PIECES = 9
 AI_PIECES = 9
+REMAINING_USER_PIECES = 9
+REMAINING_AI_PIECES = 9
 
 # activation for gameplay screen interactive elements
 gameplay_active = False
@@ -133,7 +136,7 @@ while True:
             else:
                 pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
 
-        game_over = nmm.terminal(board=BOARD, user_pieces=USER_PIECES, ai_pieces=AI_PIECES)
+        game_over = nmm.terminal(BOARD, USER_PIECES, AI_PIECES, REMAINING_USER_PIECES, REMAINING_AI_PIECES)
 
 
         # gameplay titles
@@ -200,11 +203,13 @@ while True:
                 for position in positions:
                     if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
                         action = positions[position][0]
-                        print(f"Mouse clicked on position {position}")
+                        # print(f"Mouse clicked on position {position}")
                         BOARD, PLAYER = nmm.result(BOARD, action, PLAYER)
                         if USER_PIECES > 0:    
                             USER_PIECES -= 1
             else:
+                # REMAINING_USER_PIECES, _ = nmm.remaining_pieces(board=BOARD)
+                # if REMAINING_USER_PIECES > 3:
                 ...
 
 
