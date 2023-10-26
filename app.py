@@ -45,8 +45,8 @@ PLAYER = 1
 
 USER_PIECES = 9
 AI_PIECES = 9
-REMAINING_USER_PIECES = 9
-REMAINING_AI_PIECES = 9
+REMAINING_USER_PIECES = 0
+REMAINING_AI_PIECES = 0
 
 # activation for gameplay screen interactive elements
 gameplay_active = False
@@ -141,7 +141,7 @@ while True:
 
         # gameplay titles
         if game_over:
-            winner = None
+            winner = nmm.winner(BOARD, USER_PIECES, AI_PIECES, REMAINING_USER_PIECES, REMAINING_AI_PIECES)
             if winner is None:
                 title = "Game Over: TIE."
             elif winner == nmm.USER:
@@ -168,15 +168,41 @@ while True:
             else:
                 title = "Computer thinking..."
 
+            user_pieces_text = smallFont.render("Unplayed", True, white)
+            user_pieces_textRect = user_pieces_text.get_rect()
+            user_pieces_textRect.center = (50, 150)
+            screen.blit(user_pieces_text, user_pieces_textRect)
             user_pieces = largeFont.render(str(USER_PIECES), True, white)
             user_piecesRect = user_pieces.get_rect()
-            user_piecesRect.center = (50, 300)
+            user_piecesRect.center = (50, 200)
             screen.blit(user_pieces, user_piecesRect)
 
+            ai_pieces_text = smallFont.render("Unplayed", True, black)
+            ai_pieces_textRect = ai_pieces_text.get_rect()
+            ai_pieces_textRect.center = (550, 150)
+            screen.blit(ai_pieces_text, ai_pieces_textRect)
             ai_pieces = largeFont.render(str(AI_PIECES), True, black)
             ai_piecesRect = ai_pieces.get_rect()
-            ai_piecesRect.center = (550, 300)
+            ai_piecesRect.center = (550, 200)
             screen.blit(ai_pieces, ai_piecesRect)
+
+            r_user_pieces_text = smallFont.render("Remaining", True, white)
+            r_user_pieces_textRect = r_user_pieces_text.get_rect()
+            r_user_pieces_textRect.center = (50, 350)
+            screen.blit(r_user_pieces_text, r_user_pieces_textRect)
+            r_user_pieces = largeFont.render(str(REMAINING_USER_PIECES), True, white)
+            r_user_piecesRect = r_user_pieces.get_rect()
+            r_user_piecesRect.center = (50, 400)
+            screen.blit(r_user_pieces, r_user_piecesRect)
+
+            r_ai_pieces_text = smallFont.render("Remaining", True, black)
+            r_ai_pieces_textRect = r_ai_pieces_text.get_rect()
+            r_ai_pieces_textRect.center = (550, 350)
+            screen.blit(r_ai_pieces_text, r_ai_pieces_textRect)
+            r_ai_pieces = largeFont.render(str(REMAINING_AI_PIECES), True, black)
+            r_ai_piecesRect = ai_pieces.get_rect()
+            r_ai_piecesRect.center = (550, 400)
+            screen.blit(r_ai_pieces, r_ai_piecesRect)
         
         title = largeFont.render(title, True, gold)
         titleRect = title.get_rect()
@@ -187,12 +213,13 @@ while True:
         # check for AI move
         if PLAYER == 2 and not game_over:
             # move = nmm.minimax(BOARD, DIFFICULTY)
-            print([value[0] for value in playable_positions.values()])
+            # print([value[0] for value in playable_positions.values()])
             move = random.choice([value[0] for value in playable_positions.values()])
-            print(move)
+            # print(move)
             BOARD, PLAYER = nmm.result(board=BOARD, action=move, player=PLAYER)
             if AI_PIECES > 0:
                 AI_PIECES -= 1
+                REMAINING_AI_PIECES += 1
 
 
         # check for user move
@@ -207,6 +234,7 @@ while True:
                         BOARD, PLAYER = nmm.result(BOARD, action, PLAYER)
                         if USER_PIECES > 0:    
                             USER_PIECES -= 1
+                            REMAINING_USER_PIECES += 1
             else:
                 # REMAINING_USER_PIECES, _ = nmm.remaining_pieces(board=BOARD)
                 # if REMAINING_USER_PIECES > 3:
