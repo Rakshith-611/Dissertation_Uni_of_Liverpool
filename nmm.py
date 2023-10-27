@@ -12,7 +12,14 @@ INTERMEDIATE = "intermediate"
 EMPTY = None
 USER = 1
 AI = 2
-
+# BOARD =     [[USER, "$", "$", USER, "$", "$", AI],
+#             ["$", USER, "$", USER, "$", AI, "$"],
+#             ["$", "$", EMPTY, AI, EMPTY, "$", "$"],
+#             [EMPTY, EMPTY, EMPTY, "$", EMPTY, EMPTY, EMPTY],
+#             ["$", "$", EMPTY, USER, EMPTY, "$", "$"],
+#             ["$", AI, "$", EMPTY, "$", EMPTY, "$"],
+#             [EMPTY, "$", "$", USER, "$", "$", AI]
+#             ]
 
 def initial_state():
     """
@@ -102,7 +109,36 @@ def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     else:
         if r_user_pieces < 3: return AI
         elif r_ai_pieces < 3: return USER
-    
+
+
+def check_triple(board, action, player):
+    """
+    Returns true if 
+    """
+    arr = np.array(board)
+    # get the row and column where the move was made
+    row, column = arr[action[0]], arr[:, action[1]]
+
+    lines = [row, column]
+    # edge case for middle row or column
+    if row[3] == "$":
+        row_a, row_b = row[:3], row[4:]
+        lines.pop(0)
+        lines.append(row_a)
+        lines.append(row_b)
+    if column[3] == "$":
+        column_a, column_b = column[:3], column[4:]
+        lines.pop(-1)
+        lines.append(column_a)
+        lines.append(column_b)
+
+    # Check if all elements in each line (except '$') are equal to 'player'
+    for line in lines:
+        if np.all(line[line != "$"] == player):
+            return True
+
+    return False
+
 
 def terminal(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     """

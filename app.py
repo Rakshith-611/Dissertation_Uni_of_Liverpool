@@ -23,13 +23,13 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 screen = pygame.display.set_mode(size)
 
 BOARD = nmm.initial_state()
-# BOARD =     [[nmm.USER, "$", "$", nmm.EMPTY, "$", "$", nmm.AI],
-#             ["$", nmm.USER, "$", nmm.EMPTY, "$", nmm.AI, "$"],
-#             ["$", "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", "$"],
-#             [nmm.EMPTY, nmm.EMPTY, nmm.EMPTY, "$", nmm.EMPTY, nmm.EMPTY, nmm.EMPTY],
-#             ["$", "$", nmm.EMPTY, nmm.USER, nmm.EMPTY, "$", "$"],
-#             ["$", nmm.AI, "$", nmm.EMPTY, "$", nmm.EMPTY, "$"],
-#             [nmm.EMPTY, "$", "$", nmm.USER, "$", "$", nmm.AI]
+# BOARD =     [[USER, "$", "$", USER, "$", "$", AI],
+#             ["$", USER, "$", USER, "$", AI, "$"],
+#             ["$", "$", EMPTY, AI, EMPTY, "$", "$"],
+#             [EMPTY, EMPTY, EMPTY, "$", EMPTY, EMPTY, EMPTY],
+#             ["$", "$", EMPTY, USER, EMPTY, "$", "$"],
+#             ["$", AI, "$", EMPTY, "$", EMPTY, "$"],
+#             [EMPTY, "$", "$", USER, "$", "$", AI]
 #             ]
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
