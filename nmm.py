@@ -73,15 +73,6 @@ def result(board, action, player):
     return newBoard, new_player
 
 
-def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
-    """
-    Returns the winner of the game, if there is one.
-    """
-    return None
-            
-
-
-
 def remaining_pieces(board):
     """
     Returns the number of user and ai pieces still left on the board
@@ -98,6 +89,20 @@ def remaining_pieces(board):
 
     return user, ai
 
+
+def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
+    """
+    Returns the winner of the game, if there is one.
+    """
+    # can't have a winner until total remaining pieces is still 3 or more
+    if user_pieces > 0 or ai_pieces > 0:
+        if ((user_pieces + r_user_pieces) > 2) or ((ai_pieces + r_ai_pieces) > 3):
+            return None
+    
+    else:
+        if r_user_pieces < 3: return AI
+        elif r_ai_pieces < 3: return USER
+    
 
 def terminal(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     """

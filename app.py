@@ -232,9 +232,8 @@ while True:
                         action = positions[position][0]
                         # print(f"Mouse clicked on position {position}")
                         BOARD, PLAYER = nmm.result(BOARD, action, PLAYER)
-                        if USER_PIECES > 0:    
-                            USER_PIECES -= 1
-                            REMAINING_USER_PIECES += 1
+                        USER_PIECES -= 1
+                        REMAINING_USER_PIECES += 1
             else:
                 # REMAINING_USER_PIECES, _ = nmm.remaining_pieces(board=BOARD)
                 # if REMAINING_USER_PIECES > 3:
