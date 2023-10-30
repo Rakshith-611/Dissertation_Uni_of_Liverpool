@@ -215,12 +215,17 @@ while True:
         if PLAYER == 2 and not game_over:
             # move = nmm.minimax(BOARD, DIFFICULTY)
             # print([value[0] for value in playable_positions.values()])
-            move = random.choice([value[0] for value in playable_positions.values()])
             # print(move)
-            BOARD = nmm.result(board=BOARD, action=move, player=PLAYER)
             if AI_PIECES > 0:
+                move = random.choice([value[0] for value in playable_positions.values()])
+                BOARD = nmm.result(BOARD, move, PLAYER)
                 AI_PIECES -= 1
                 REMAINING_AI_PIECES += 1
+
+                if nmm.check_triple(BOARD, move, PLAYER):
+                    choice = random.choice([value[0] for value in user_positions.values()])
+                    BOARD = nmm.remove(BOARD, choice, PLAYER)
+                    REMAINING_USER_PIECES -= 1
 
             # change player
             PLAYER = 3 - PLAYER
