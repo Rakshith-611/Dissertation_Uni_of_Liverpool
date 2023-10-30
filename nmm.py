@@ -45,7 +45,6 @@ def actions(board, difficulty):
     moves = set()
 
 
-
 def board_positions(board):
     """
     Returns a dictionary of the form {intersection: (index, value)}
@@ -58,13 +57,44 @@ def board_positions(board):
     
     # pair the positions to the intersection points
     return {i+1: position for i, position in enumerate(positions)}
+
+
+def board_pieces(board):
+    """
+    Returns the pieces and the positions of player and ai
+    """
+    positions = board_positions(board)
+    
+    user_pieces = {}
+    ai_pieces = {}
+    for position in positions:
+        if positions[position][1] == USER:
+            user_pieces[position] = positions[position]
+        elif positions[position][1] == AI:
+            ai_pieces[position] = positions[position]
+    
+    return user_pieces, ai_pieces
+# board_pieces(initial_state())
+
+def remove(board, action, player):
+    """
+    Removes an opponent piece
+    """
+    newBoard = deepcopy(board)
+
+    i, j = action
+
+    if newBoard[i][j] == EMPTY or newBoard[i][j] == player:
+        raise Exception("not a valid move")
+    else:
+        newBoard[i][j] = EMPTY
+
+    return newBoard
             
 
 def result(board, action, player):
     """
     Returns the board that results from making a move on the current board.
-    And
-    The next player after the move is made
     """
     newBoard = deepcopy(board)
 
@@ -74,27 +104,26 @@ def result(board, action, player):
         raise Exception("not a valid move")
     else:
         newBoard[i][j] = player
-        new_player = 3 - player
     
     # return the new board state and the next player
-    return newBoard, new_player
+    return newBoard
 
 
-def remaining_pieces(board):
-    """
-    Returns the number of user and ai pieces still left on the board
-    """
+# def remaining_pieces(board):
+#     """
+#     Returns the number of user and ai pieces still left on the board
+#     """
 
-    # set user and ai piece count
-    user = 0
-    ai = 0
+#     # set user and ai piece count
+#     user = 0
+#     ai = 0
 
-    for row in board:
-        for cell in row:
-            if cell == USER: user += 1
-            elif cell == AI: ai += 1
+#     for row in board:
+#         for cell in row:
+#             if cell == USER: user += 1
+#             elif cell == AI: ai += 1
 
-    return user, ai
+#     return user, ai
 
 
 def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
@@ -113,7 +142,7 @@ def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
 
 def check_triple(board, action, player):
     """
-    Returns true if 
+    Returns true if there is a 3 in a row of any player pieces
     """
     arr = np.array(board)
     # get the row and column where the move was made
@@ -122,15 +151,19 @@ def check_triple(board, action, player):
     lines = [row, column]
     # edge case for middle row or column
     if row[3] == "$":
-        row_a, row_b = row[:3], row[4:]
         lines.pop(0)
-        lines.append(row_a)
-        lines.append(row_b)
+        row_a, row_b = row[:3], row[4:]
+        if action[0] < 3:
+            lines.append(row_a)
+        else:
+            lines.append(row_b)
     if column[3] == "$":
-        column_a, column_b = column[:3], column[4:]
         lines.pop(-1)
-        lines.append(column_a)
-        lines.append(column_b)
+        column_a, column_b = column[:3], column[4:]
+        if action[1] < 3:
+            lines.append(column_a)
+        else:
+            lines.append(column_b)
 
     # Check if all elements in each line (except '$') are equal to 'player'
     for line in lines:
@@ -154,7 +187,7 @@ def terminal(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
             return False
     
     else:
-        p_1, p_2 = remaining_pieces(board)
+        p_1, p_2 = r_user_pieces, r_ai_pieces
         
         # if either player has only two pieces left then it's game over
         if p_1 < 3 or p_2 < 3:

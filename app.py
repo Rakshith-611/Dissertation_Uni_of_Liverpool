@@ -114,6 +114,7 @@ while True:
         playable_positions = {position: [positions[position][0], positions[position][1]] 
                               for position in positions 
                               if positions[position][1] == nmm.EMPTY}
+        user_positions, ai_positions = nmm.board_pieces(BOARD)
         
         # display the game board
         board_surface = pygame.image.load("Graphics/gameboard.jpg").convert_alpha()
@@ -216,28 +217,41 @@ while True:
             # print([value[0] for value in playable_positions.values()])
             move = random.choice([value[0] for value in playable_positions.values()])
             # print(move)
-            BOARD, PLAYER = nmm.result(board=BOARD, action=move, player=PLAYER)
+            BOARD = nmm.result(board=BOARD, action=move, player=PLAYER)
             if AI_PIECES > 0:
                 AI_PIECES -= 1
                 REMAINING_AI_PIECES += 1
+
+            # change player
+            PLAYER = 3 - PLAYER
 
 
         # check for user move
         click, _, _ = pygame.mouse.get_pressed()
         if click and PLAYER == 1 and not game_over:
+            mouse = pygame.mouse.get_pos()
             if USER_PIECES > 0:
-                mouse = pygame.mouse.get_pos()
                 for position in positions:
                     if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
+                        
                         action = positions[position][0]
-                        # print(f"Mouse clicked on position {position}")
-                        BOARD, PLAYER = nmm.result(BOARD, action, PLAYER)
+                        BOARD = nmm.result(BOARD, action, PLAYER)
                         USER_PIECES -= 1
                         REMAINING_USER_PIECES += 1
+
+                        # Check for triple
+                        if nmm.check_triple(BOARD, action, PLAYER):
+                            choice = random.choice([value[0] for value in ai_positions.values()])
+                            BOARD = nmm.remove(BOARD, choice, PLAYER)
+                            REMAINING_AI_PIECES -= 1
+
+                        # Change player
+                        PLAYER = 3 - PLAYER
+                        
+            
             else:
                 # REMAINING_USER_PIECES, _ = nmm.remaining_pieces(board=BOARD)
                 # if REMAINING_USER_PIECES > 3:
                 ...
-
 
     pygame.display.flip()
