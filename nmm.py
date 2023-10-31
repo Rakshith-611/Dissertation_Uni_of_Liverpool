@@ -5,6 +5,7 @@ Nine Men's Morris Player
 from copy import deepcopy
 import numpy as np
 import random
+from collections import Counter
 
 BEGINNER = "beginner"
 INTERMEDIATE = "intermediate"
@@ -147,6 +148,38 @@ def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
         elif r_ai_pieces < 3: return USER
 
 
+def check_double(board, action, player):
+    """
+    Returns true if there are 2 in a line of any player pieces
+    """
+    arr = np.array(board)
+    row, col = arr[action[0]], arr[:, action[1]]
+
+    lines = [row, col]
+
+    if row[3] == "$":
+        lines.pop(0)
+        row_a, row_b = row[:3], row[4:]
+        if action[0] < 3:
+            lines.append(row_a)
+        else:
+            lines.append(row_b)
+    if col[3] == "$":
+        lines.pop(-1)
+        column_a, column_b = col[:3], col[4:]
+        if action[1] < 3:
+            lines.append(column_a)
+        else:
+            lines.append(column_b)
+
+    for line in lines:
+        line = [value for value in line if value != '$']
+
+    for line in lines:
+        if 2 in Counter(line).values():
+            return True
+
+
 def check_triple(board, action, player):
     """
     Returns true if there is a 3 in a row of any player pieces
@@ -218,7 +251,8 @@ def main():
     # minimax(initial_state(), BEGINNER)
     # print(minimax(initial_state(), BEGINNER))
     board = result(board, (0,0), USER)
-    print(actions(board, AI, 9, 9))
+    # print(actions(board, AI, 9, 9))
+    # check_double(board, (6, 6), 1)
 
 
 if __name__ == "__main__":
