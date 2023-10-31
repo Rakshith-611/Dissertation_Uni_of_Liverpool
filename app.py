@@ -111,7 +111,7 @@ while True:
 
         gameplay_active = True
         positions = nmm.board_positions(board=BOARD)
-        playable_positions = {position: [positions[position][0], positions[position][1]] 
+        playable_positions = {position: positions[position]
                               for position in positions 
                               if positions[position][1] == nmm.EMPTY}
         user_positions, ai_positions = nmm.board_pieces(BOARD)

@@ -36,15 +36,6 @@ def initial_state():
             ]
 
 
-def actions(board, difficulty):
-    """
-    Returns set of all possible actions (i, j) available on the board.
-    """
-
-    # initialize a set of all possible moves
-    moves = set()
-
-
 def board_positions(board):
     """
     Returns a dictionary of the form {intersection: (index, value)}
@@ -57,6 +48,22 @@ def board_positions(board):
     
     # pair the positions to the intersection points
     return {i+1: position for i, position in enumerate(positions)}
+
+
+def actions(board, player, user_pieces, ai_pieces):
+    """
+    Returns set of all possible actions (i, j) available on the board.
+    """
+
+    if player == USER and user_pieces > 0:
+        positions = board_positions(board)
+        return [positions[position][0] for position in positions if positions[position][1] == EMPTY]
+    if player == AI and ai_pieces > 0:
+        positions = board_positions(board)
+        return [positions[position][0] for position in positions if positions[position][1] == EMPTY]
+
+    # initialize a set of all possible moves
+    moves = set()
 
 
 def board_pieces(board):
@@ -210,6 +217,8 @@ def main():
     board = initial_state()
     # minimax(initial_state(), BEGINNER)
     # print(minimax(initial_state(), BEGINNER))
+    board = result(board, (0,0), USER)
+    print(actions(board, AI, 9, 9))
 
 
 if __name__ == "__main__":
