@@ -9,7 +9,7 @@ from collections import Counter
 import math
 
 BEGINNER = 1
-INTERMEDIATE = 2
+INTERMEDIATE = 3
 
 EMPTY = None
 USER = 1
@@ -153,7 +153,9 @@ def check_double(board, action, player):
     """
     Returns true if there are 2 in a line of any player pieces
     """
-    arr = np.array(board)
+    newBoard = deepcopy(board)
+    newBoard = result(newBoard, action, player)
+    arr = np.array(newBoard)
     row, col = arr[action[0]], arr[:, action[1]]
 
     lines = [row, col]
@@ -173,11 +175,14 @@ def check_double(board, action, player):
         else:
             lines.append(column_b)
 
+    lines = [np.ndarray.tolist(line) for line in lines]
     for line in lines:
-        line = [value for value in line if value != '$']
+        if "$" in line:
+            while "$" in line:
+                line.remove("$")
 
     for line in lines:
-        if 2 in Counter(line).values():
+        if line.count(player) == 2:
             return True
 
 
@@ -185,7 +190,9 @@ def check_triple(board, action, player):
     """
     Returns true if there is a 3 in a row of any player pieces
     """
-    arr = np.array(board)
+    newBoard = deepcopy(board)
+    newBoard = result(newBoard, action, player)
+    arr = np.array(newBoard)
     # get the row and column where the move was made
     row, column = arr[action[0]], arr[:, action[1]]
 
@@ -257,7 +264,6 @@ def utility(board, action, player):
             return 0
 
 
-
 def minimax(board, difficulty, player, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     """
     Returns the optimal action (i,j) for the AI.
@@ -265,11 +271,19 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces, r_user_pieces, r_
     ...
 
 
-def max_value(board, difficulty, action, player, user_pieces, ai_pieces):
+def max_value(board, depth, action, player, user_pieces, ai_pieces):
     """
     Returns max value from current state
     """
-    ...
+    if depth == 0:
+        return utility(board, action, player)
+    
+    v = -math.inf
+
+    for move in actions(board, player, user_pieces, ai_pieces):
+        print(move, utility(board, move, player))
+    
+
 
 
 def min_value(board, difficulty, action, player, user_pieces, ai_pieces):
@@ -281,11 +295,14 @@ def min_value(board, difficulty, action, player, user_pieces, ai_pieces):
 
 def main():
     board = initial_state()
-    # minimax(initial_state(), BEGINNER)
-    # print(minimax(initial_state(), BEGINNER))
     board = result(board, (0,0), USER)
-    # print(actions(board, AI, 9, 9))
-    # check_double(board, (6, 6), 1)
+    board = result(board, (0,3), AI)
+
+    board = result(board, (3,0), USER)
+    board = result(board, (1,3), AI)
+    # board = result(board, (6,0), USER)
+    # board = result(board, (2,3), AI)
+    # max_value(board, 1, (6,6), USER, 6, 6)
 
 
 if __name__ == "__main__":
