@@ -278,19 +278,30 @@ def max_value(board, depth, action, player, user_pieces, ai_pieces):
     if depth == 0:
         return utility(board, action, player)
     
+    depth -= 1
     v = -math.inf
 
     for move in actions(board, player, user_pieces, ai_pieces):
-        print(move, utility(board, move, player))
-    
+        v = max(v, min_value(result(board, move, player), depth, move, 3-player, user_pieces-1, ai_pieces))
+
+    return v
 
 
-
-def min_value(board, difficulty, action, player, user_pieces, ai_pieces):
+def min_value(board, depth, action, player, user_pieces, ai_pieces):
     """
     Returns min value from current state
     """
-    ...
+    if depth == 0:
+        return utility(board, action, player)
+    
+    depth -= 1
+    v = math.inf
+
+    for move in actions(board, player, user_pieces, ai_pieces):
+        v = min(v, max_value(result(board, move, player), depth, move, 3-player, user_pieces, ai_pieces-1))
+
+    return v
+    
 
 
 def main():
