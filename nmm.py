@@ -6,9 +6,10 @@ from copy import deepcopy
 import numpy as np
 import random
 from collections import Counter
+import math
 
-BEGINNER = "beginner"
-INTERMEDIATE = "intermediate"
+BEGINNER = 1
+INTERMEDIATE = 2
 
 EMPTY = None
 USER = 1
@@ -265,6 +266,36 @@ def minimax(board, difficulty):
     #     # print([value[0] for value in board_positions(initial_state()).values()])
     #     choices = [value[0] for value in board_positions(board).values()]
     #     return random.choice(choices)
+
+
+def max_value(board, difficulty, action, player):
+    """
+    Returns max value from current state
+    """
+    if difficulty == 0:
+        return utility(board, action, player)
+    
+    difficulty -= 1
+    v = -math.inf
+
+    for action in actions(board, action, player):
+        v = max(v, min_value(result(board, action, 3-player)))
+
+    return v
+
+
+def min_value(board, difficulty, action, player):
+    """
+    Returns min value from current state
+    """
+    if difficulty == 0:
+        return utility(board, action, player)
+    
+    difficulty -= 1
+    v = math.inf
+
+    for action in actions(board, action, player):
+        v = min(v, max(min_value(board, difficulty, action, 3-player)))
 
 
 def main():
