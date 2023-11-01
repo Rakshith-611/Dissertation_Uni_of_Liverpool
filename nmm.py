@@ -236,6 +236,27 @@ def terminal(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     return False
 
 
+def utility(board, action, player):
+    """
+    Returns the utility value of the board
+    """
+    if player == USER:
+        if check_triple(board, action, player):
+            return 1
+        elif check_double(board, action, player):
+            return 0.5
+        else:
+            return 0
+    elif player == AI:
+        if check_triple(board, action, player):
+            return -1
+        elif check_double(board, action, player):
+            return -0.5
+        else:
+            return 0
+
+
+
 def minimax(board, difficulty):
     """
     Returns the optimal action (i,j) for the AI.
