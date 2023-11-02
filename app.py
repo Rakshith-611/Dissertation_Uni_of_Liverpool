@@ -23,14 +23,6 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 screen = pygame.display.set_mode(size)
 
 BOARD = nmm.initial_state()
-# BOARD =     [[USER, "$", "$", USER, "$", "$", AI],
-#             ["$", USER, "$", USER, "$", AI, "$"],
-#             ["$", "$", EMPTY, AI, EMPTY, "$", "$"],
-#             [EMPTY, EMPTY, EMPTY, "$", EMPTY, EMPTY, EMPTY],
-#             ["$", "$", EMPTY, USER, EMPTY, "$", "$"],
-#             ["$", AI, "$", EMPTY, "$", EMPTY, "$"],
-#             [EMPTY, "$", "$", USER, "$", "$", AI]
-#             ]
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
@@ -105,6 +97,7 @@ while True:
             elif intermediateButton.collidepoint(mouse):
                 time.sleep(0.2)
                 DIFFICULTY = nmm.INTERMEDIATE
+
 
     # Gameplay page
     else:
@@ -217,15 +210,17 @@ while True:
             # print([value[0] for value in playable_positions.values()])
             # print(move)
             if AI_PIECES > 0:
-                move = random.choice([value[0] for value in playable_positions.values()])
-                BOARD = nmm.result(BOARD, move, PLAYER)
-                AI_PIECES -= 1
-                REMAINING_AI_PIECES += 1
+                # move = random.choice([value[0] for value in playable_positions.values()])
+                move = nmm.minimax(BOARD, DIFFICULTY, PLAYER, USER_PIECES, AI_PIECES)
 
                 if nmm.check_triple(BOARD, move, PLAYER):
                     choice = random.choice([value[0] for value in user_positions.values()])
                     BOARD = nmm.remove(BOARD, choice, PLAYER)
                     REMAINING_USER_PIECES -= 1
+
+                BOARD = nmm.result(BOARD, move, PLAYER)
+                AI_PIECES -= 1
+                REMAINING_AI_PIECES += 1
 
             # change player
             PLAYER = 3 - PLAYER
@@ -240,23 +235,20 @@ while True:
                     if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
                         
                         action = positions[position][0]
-                        BOARD = nmm.result(BOARD, action, PLAYER)
-                        USER_PIECES -= 1
-                        REMAINING_USER_PIECES += 1
-
                         # Check for triple
                         if nmm.check_triple(BOARD, action, PLAYER):
                             choice = random.choice([value[0] for value in ai_positions.values()])
                             BOARD = nmm.remove(BOARD, choice, PLAYER)
                             REMAINING_AI_PIECES -= 1
 
+                        BOARD = nmm.result(BOARD, action, PLAYER)
+                        USER_PIECES -= 1
+                        REMAINING_USER_PIECES += 1
+
                         # Change player
                         PLAYER = 3 - PLAYER
                         
-            
             else:
-                # REMAINING_USER_PIECES, _ = nmm.remaining_pieces(board=BOARD)
-                # if REMAINING_USER_PIECES > 3:
                 ...
 
     pygame.display.flip()

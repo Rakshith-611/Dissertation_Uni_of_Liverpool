@@ -8,20 +8,14 @@ import random
 from collections import Counter
 import math
 
-BEGINNER = 1
-INTERMEDIATE = 3
+BEGINNER = 'beginner'
+INTERMEDIATE = 'intermediate'
+HARD = 'hard'
 
 EMPTY = None
 USER = 1
 AI = 2
-# BOARD =     [[USER, "$", "$", USER, "$", "$", AI],
-#             ["$", USER, "$", USER, "$", AI, "$"],
-#             ["$", "$", EMPTY, AI, EMPTY, "$", "$"],
-#             [EMPTY, EMPTY, EMPTY, "$", EMPTY, EMPTY, EMPTY],
-#             ["$", "$", EMPTY, USER, EMPTY, "$", "$"],
-#             ["$", AI, "$", EMPTY, "$", EMPTY, "$"],
-#             [EMPTY, "$", "$", USER, "$", "$", AI]
-#             ]
+
 
 def initial_state():
     """
@@ -64,9 +58,6 @@ def actions(board, player, user_pieces, ai_pieces):
         positions = board_positions(board)
         return [positions[position][0] for position in positions if positions[position][1] == EMPTY]
 
-    # initialize a set of all possible moves
-    moves = set()
-
 
 def board_pieces(board):
     """
@@ -83,7 +74,7 @@ def board_pieces(board):
             ai_pieces[position] = positions[position]
     
     return user_pieces, ai_pieces
-# board_pieces(initial_state())
+
 
 def remove(board, action, player):
     """
@@ -118,23 +109,6 @@ def result(board, action, player):
     return newBoard
 
 
-# def remaining_pieces(board):
-#     """
-#     Returns the number of user and ai pieces still left on the board
-#     """
-
-#     # set user and ai piece count
-#     user = 0
-#     ai = 0
-
-#     for row in board:
-#         for cell in row:
-#             if cell == USER: user += 1
-#             elif cell == AI: ai += 1
-
-#     return user, ai
-
-
 def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     """
     Returns the winner of the game, if there is one.
@@ -164,16 +138,16 @@ def check_double(board, action, player):
         lines.pop(0)
         row_a, row_b = row[:3], row[4:]
         if action[0] < 3:
-            lines.append(row_a)
-        else:
             lines.append(row_b)
+        else:
+            lines.append(row_a)
     if col[3] == "$":
         lines.pop(-1)
         column_a, column_b = col[:3], col[4:]
         if action[1] < 3:
-            lines.append(column_a)
-        else:
             lines.append(column_b)
+        else:
+            lines.append(column_a)
 
     lines = [np.ndarray.tolist(line) for line in lines]
     for line in lines:
@@ -202,16 +176,16 @@ def check_triple(board, action, player):
         lines.pop(0)
         row_a, row_b = row[:3], row[4:]
         if action[0] < 3:
-            lines.append(row_a)
-        else:
             lines.append(row_b)
+        else:
+            lines.append(row_a)
     if column[3] == "$":
         lines.pop(-1)
         column_a, column_b = column[:3], column[4:]
         if action[1] < 3:
-            lines.append(column_a)
-        else:
             lines.append(column_b)
+        else:
+            lines.append(column_a)
 
     # Check if all elements in each line (except '$') are equal to 'player'
     for line in lines:
@@ -227,7 +201,6 @@ def terminal(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     """
     
     # if either the player or the ai still has pieces left to place, game not over
-    # phase 1
     if user_pieces > 0 or ai_pieces > 0:
         if ((user_pieces+r_user_pieces) < 3) or ((ai_pieces+r_ai_pieces) < 3):
             return True
@@ -264,56 +237,52 @@ def utility(board, action, player):
             return 0
 
 
-def minimax(board, difficulty, player, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
+def minimax(board, difficulty, player, user_pieces, ai_pieces):
     """
     Returns the optimal action (i,j) for the AI.
     """
-    ...
-
-
-def max_value(board, depth, action, player, user_pieces, ai_pieces):
-    """
-    Returns max value from current state
-    """
-    if depth == 0:
-        return utility(board, action, player)
+    # beginner difficulty, make a random move
+    if difficulty == BEGINNER:
+        return random.choice(actions(board, player, user_pieces, ai_pieces))
     
-    depth -= 1
-    v = -math.inf
+    # intermediate difficulty, make only the next best move
+    elif difficulty == INTERMEDIATE:
+        moves = []
+        v = math.inf
 
-    for move in actions(board, player, user_pieces, ai_pieces):
-        v = max(v, min_value(result(board, move, player), depth, move, 3-player, user_pieces-1, ai_pieces))
+        for move in actions(board, player, user_pieces, ai_pieces):
+            if utility(board, move, player) <= v:
+                v = utility(board, move, player)
+        
+        for move in actions(board, player, user_pieces, ai_pieces):
+            if utility(board, move, player) == v:
+                moves.append((move, v))
 
-    return v
-
-
-def min_value(board, depth, action, player, user_pieces, ai_pieces):
-    """
-    Returns min value from current state
-    """
-    if depth == 0:
-        return utility(board, action, player)
+        best_action = random.choice([x[0] for x in moves])
+        return best_action
     
-    depth -= 1
-    v = math.inf
-
-    for move in actions(board, player, user_pieces, ai_pieces):
-        v = min(v, max_value(result(board, move, player), depth, move, 3-player, user_pieces, ai_pieces-1))
-
-    return v
-    
+    # hard difficulty, make a move looking 2 turns forward
+    elif difficulty == HARD:
+        ...
 
 
 def main():
     board = initial_state()
+    
     board = result(board, (0,0), USER)
+    # print(actions(board, AI, 8, 9))
     board = result(board, (0,3), AI)
 
     board = result(board, (3,0), USER)
-    board = result(board, (1,3), AI)
+    # check_double(board, (1, 3), 2)
+    # board = result(board, (1,3), AI)
+
+    # print(utility(board, (6,0), 1))
+
     # board = result(board, (6,0), USER)
     # board = result(board, (2,3), AI)
-    # max_value(board, 1, (6,6), USER, 6, 6)
+    # max_value(board, 1, (6,6), USER, 7, 7)
+    print(minimax(board, INTERMEDIATE, AI, 7, 8))
 
 
 if __name__ == "__main__":
