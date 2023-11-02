@@ -23,6 +23,8 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 screen = pygame.display.set_mode(size)
 
 BOARD = nmm.initial_state()
+# BOARD = nmm.result(BOARD, (0,0), nmm.USER)
+# BOARD = nmm.result(BOARD, (0,6), nmm.AI)
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
@@ -87,6 +89,13 @@ while True:
         pygame.draw.rect(screen, pecan, intermediateButton)
         screen.blit(playIntermediate, playIntermediateRect)
 
+        hardButton = pygame.Rect(button_x, 500, buttonWidth, button_height)
+        playHard = mediumFont.render("EXPERT", True, yellow)
+        playHardRect = playHard.get_rect()
+        playHardRect.center = hardButton.center
+        pygame.draw.rect(screen, pecan, hardButton)
+        screen.blit(playHard, playHardRect)
+
         # check if button is clicked
         click, _, _ = pygame.mouse.get_pressed()
         if click == 1:
@@ -97,6 +106,9 @@ while True:
             elif intermediateButton.collidepoint(mouse):
                 time.sleep(0.2)
                 DIFFICULTY = nmm.INTERMEDIATE
+            elif hardButton.collidepoint(mouse):
+                time.sleep(0.2)
+                DIFFICULTY = nmm.HARD
 
 
     # Gameplay page

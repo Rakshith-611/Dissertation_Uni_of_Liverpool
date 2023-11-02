@@ -5,7 +5,7 @@ Nine Men's Morris Player
 from copy import deepcopy
 import numpy as np
 import random
-from collections import Counter
+from operator import itemgetter
 import math
 
 BEGINNER = 'beginner'
@@ -258,31 +258,65 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces):
             if utility(board, move, player) == v:
                 moves.append((move, v))
 
-        best_action = random.choice([x[0] for x in moves])
-        return best_action
+        best_move = random.choice([move[0] for move in moves])
+        return best_move
     
     # hard difficulty, make a move looking 2 turns forward
     elif difficulty == HARD:
-        ...
 
+        newBoard = deepcopy(board)
+        
+        moves = []
+        ai1_boards = []
+        v = math.inf
+        for move in actions(newBoard, AI, user_pieces, ai_pieces):
+            if utility(newBoard, move, player) <= v:
+                v = utility(newBoard, move, player)
+        for move in actions(newBoard, player, user_pieces, ai_pieces):
+            if utility(newBoard, move, player) == v:
+                moves.append([move, v])
+                ai1_boards.append(result(newBoard, move, AI))
+
+        all_user_moves = {}
+        for i, b in enumerate(ai1_boards):#[ai1_board[0] for ai1_board in ai1_boards]:
+            user_moves = []
+            v_max = -math.inf
+            
+            for move in actions(b, USER, user_pieces, ai_pieces-1):
+                if utility(b, move, USER) >= v_max:
+                    v_max = utility(b, move, USER)
+            for move in actions(b, USER, user_pieces, ai_pieces-1):
+                if utility(b, move, USER) == v_max:
+                    user_moves.append((move))
+            all_user_moves[i] = user_moves
+
+        all_user_boards = {}
+        for user_moves in all_user_moves:
+            user_boards = []
+            for move in all_user_moves[user_moves]:
+                user_boards.append(result(ai1_boards[user_moves], move, USER))
+            all_user_boards[user_moves] = user_boards
+            
+        for index in all_user_boards:
+            for final_board in all_user_boards[index]:
+                v_min = math.inf
+                for move in actions(final_board, AI, user_pieces-1, ai_pieces-1):
+                    if utility(final_board, move, AI) <= v_min:
+                        v_min = utility(final_board, move, AI)
+            moves[index][1] = v_min
+
+    min_value = min(moves, key=itemgetter(1))[1]
+    best_move = random.choice([move for move, value in moves if value == min_value])
+    return best_move
+        
 
 def main():
     board = initial_state()
     
     board = result(board, (0,0), USER)
-    # print(actions(board, AI, 8, 9))
-    board = result(board, (0,3), AI)
-
+    board = result(board, (0,6), AI)
     board = result(board, (3,0), USER)
-    # check_double(board, (1, 3), 2)
-    # board = result(board, (1,3), AI)
-
-    # print(utility(board, (6,0), 1))
-
-    # board = result(board, (6,0), USER)
-    # board = result(board, (2,3), AI)
-    # max_value(board, 1, (6,6), USER, 7, 7)
-    print(minimax(board, INTERMEDIATE, AI, 7, 8))
+    print(minimax(board, HARD, AI, 7, 8))
 
 
 if __name__ == "__main__":
