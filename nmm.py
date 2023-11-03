@@ -243,7 +243,11 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces):
     """
     # beginner difficulty, make a random move
     if difficulty == BEGINNER:
-        return random.choice(actions(board, player, user_pieces, ai_pieces))
+        moves = actions(board, player, user_pieces, ai_pieces)
+        print(f"\nOptimal moves to be made: {moves}")
+        best_move = random.choice(moves)
+        print(f"---------------------------------------------\nBest move in the current situation is:\n{best_move}\n---------------------------------------------")
+        return best_move
     
     # intermediate difficulty, make only the next best move
     elif difficulty == INTERMEDIATE:
@@ -257,8 +261,9 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces):
         for move in actions(board, player, user_pieces, ai_pieces):
             if utility(board, move, player) == v:
                 moves.append((move, v))
-
+        print(f"\nOptimal moves to be made: {moves}")
         best_move = random.choice([move[0] for move in moves])
+        print(f"---------------------------------------------\nBest move in the current situation is:\n{best_move}\n---------------------------------------------")
         return best_move
     
     # hard difficulty, make a move looking 2 turns forward
@@ -328,7 +333,7 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces):
     best_moves = [move for move, value in moves if value == min_value]
     print(f"By playing in either {best_moves} we get a utility of {min_value}")
     best_move = random.choice(best_moves)
-    print(f"\n-----------\nThe best move in the current situation is:\n{best_move}\n-----------")
+    print(f"\n-----------------------------------------------\nThe best move in the current situation is:\n{best_move}\n-----------------------------------------------")
     return best_move
         
 
