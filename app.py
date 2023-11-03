@@ -22,9 +22,19 @@ largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
 
 screen = pygame.display.set_mode(size)
 
+USER_PIECES = 9
+AI_PIECES = 9
+REMAINING_USER_PIECES = 0
+REMAINING_AI_PIECES = 0
+
 BOARD = nmm.initial_state()
-# BOARD = nmm.result(BOARD, (0,0), nmm.USER)
-# BOARD = nmm.result(BOARD, (0,6), nmm.AI)
+BOARD = nmm.result(BOARD, (0,0), nmm.USER)
+BOARD = nmm.result(BOARD, (0,6), nmm.AI)
+# BOARD = nmm.result(BOARD, (6,6), nmm.AI)
+USER_PIECES -= 1
+AI_PIECES -= 1
+REMAINING_AI_PIECES += 1
+REMAINING_USER_PIECES += 1
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
@@ -36,11 +46,6 @@ intersections = [(130, 130), (300, 130), (470, 130),
 
 DIFFICULTY = None
 PLAYER = 1
-
-USER_PIECES = 9
-AI_PIECES = 9
-REMAINING_USER_PIECES = 0
-REMAINING_AI_PIECES = 0
 
 # activation for gameplay screen interactive elements
 gameplay_active = False
@@ -218,9 +223,6 @@ while True:
 
         # check for AI move
         if PLAYER == 2 and not game_over:
-            # move = nmm.minimax(BOARD, DIFFICULTY)
-            # print([value[0] for value in playable_positions.values()])
-            # print(move)
             if AI_PIECES > 0:
                 # move = random.choice([value[0] for value in playable_positions.values()])
                 move = nmm.minimax(BOARD, DIFFICULTY, PLAYER, USER_PIECES, AI_PIECES)

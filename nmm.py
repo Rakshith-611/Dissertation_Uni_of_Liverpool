@@ -277,6 +277,14 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces):
                 moves.append([move, v])
                 ai1_boards.append(result(newBoard, move, AI))
 
+        print(f"\nOne step AI moves")
+        print(moves)
+        print()
+        for board in ai1_boards:
+            for row in board:
+                print(row)
+            print()
+
         all_user_moves = {}
         for i, b in enumerate(ai1_boards):#[ai1_board[0] for ai1_board in ai1_boards]:
             user_moves = []
@@ -296,6 +304,17 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces):
             for move in all_user_moves[user_moves]:
                 user_boards.append(result(ai1_boards[user_moves], move, USER))
             all_user_boards[user_moves] = user_boards
+        
+        # visualise user moves
+        print('----------------------------------------------------------------------')
+        print(f"\nUtility for boards after user move = {v_max}")
+        for user_boards in all_user_boards:
+            print(f"User moves for AI move {user_boards+1}")
+            for board in all_user_boards[user_boards]:
+                for row in board:
+                    print(row)
+                print()
+        print('----------------------------------------------------------------------')
             
         for index in all_user_boards:
             for final_board in all_user_boards[index]:
@@ -306,7 +325,10 @@ def minimax(board, difficulty, player, user_pieces, ai_pieces):
             moves[index][1] = v_min
 
     min_value = min(moves, key=itemgetter(1))[1]
-    best_move = random.choice([move for move, value in moves if value == min_value])
+    best_moves = [move for move, value in moves if value == min_value]
+    print(f"By playing in either {best_moves} we get a utility of {min_value}")
+    best_move = random.choice(best_moves)
+    print(f"\n-----------\nThe best move in the current situation is:\n{best_move}\n-----------")
     return best_move
         
 
