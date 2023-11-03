@@ -28,13 +28,12 @@ REMAINING_USER_PIECES = 0
 REMAINING_AI_PIECES = 0
 
 BOARD = nmm.initial_state()
-BOARD = nmm.result(BOARD, (0,0), nmm.USER)
-BOARD = nmm.result(BOARD, (0,6), nmm.AI)
-# BOARD = nmm.result(BOARD, (6,6), nmm.AI)
-USER_PIECES -= 1
-AI_PIECES -= 1
-REMAINING_AI_PIECES += 1
-REMAINING_USER_PIECES += 1
+# BOARD = nmm.result(BOARD, (0,0), nmm.USER)
+# BOARD = nmm.result(BOARD, (0,6), nmm.AI)
+# USER_PIECES -= 1
+# AI_PIECES -= 1
+# REMAINING_AI_PIECES += 1
+# REMAINING_USER_PIECES += 1
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
