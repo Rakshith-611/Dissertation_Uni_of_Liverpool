@@ -142,8 +142,18 @@ def test_actions():
                                               (4, 2), (4, 3), (4, 4),
                                               (5, 1), (5, 3), (5, 5),
                                               (6, 0), (6, 3)]
+    
 
+def test_board_pieces():
+    """
+    Tests for the positions of all played pieces on the game board
+    """
+    board = nmm.initial_state()
 
-board = nmm.initial_state()
-print(nmm.actions(board, USER, 9, 9))
-
+    board = nmm.result(board, (0, 0), USER)
+    assert nmm.board_pieces(board) == ({1: [(0, 0), USER]},
+                                        {})
+    
+    board = nmm.result(board, (6, 6), AI)
+    assert nmm.board_pieces(board) == ({1: [(0, 0), USER]},
+                                       {24: [(6, 6), AI]})
