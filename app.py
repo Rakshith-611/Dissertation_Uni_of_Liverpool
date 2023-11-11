@@ -38,7 +38,8 @@ BOARD = nmm.initial_state()
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
                  (250, 250), (300, 250), (352, 250),
-                 (130, 300), (192, 300), (250, 300), (352, 300), (408, 300), (470, 300),
+                 (130, 300), (192, 300), (250, 300),
+                 (352, 300), (408, 300), (470, 300),
                  (250, 352), (300, 352), (350, 352),
                  (192, 408), (300, 408), (408, 408),
                  (130, 470), (300, 470), (470, 470)]
@@ -86,7 +87,10 @@ while True:
         pygame.draw.rect(screen, pecan, beginnerButton)
         screen.blit(playBeginner, playBeginnerRect)
 
-        intermediateButton = pygame.Rect(button_x, 400, buttonWidth, button_height)
+        intermediateButton = pygame.Rect(button_x,
+                                         400,
+                                         buttonWidth,
+                                         button_height)
         playIntermediate = mediumFont.render("INTERMEDIATE", True, yellow)
         playIntermediateRect = playIntermediate.get_rect()
         playIntermediateRect.center = intermediateButton.center
@@ -114,44 +118,61 @@ while True:
                 time.sleep(0.2)
                 DIFFICULTY = nmm.HARD
 
-
     # Gameplay page
     else:
 
         gameplay_active = True
         positions = nmm.board_positions(board=BOARD)
         playable_positions = {position: positions[position]
-                              for position in positions 
+                              for position in positions
                               if positions[position][1] == nmm.EMPTY}
         user_positions, ai_positions = nmm.board_pieces(BOARD)
-        
+
         # display the game board
         board_surface = pygame.image.load("Graphics/gameboard.jpg").convert_alpha()
-        board_surface = pygame.transform.scale(board_surface, (400,400))
-        board_rect = board_surface.get_rect(center = (300,300))
+        board_surface = pygame.transform.scale(board_surface, (400, 400))
+        board_rect = board_surface.get_rect(center=(300, 300))
         screen.blit(board_surface, board_rect)
-
 
         # add playable positions
         tiles = {}
         for position, intersection in enumerate(intersections):
-            intersection_rect = pygame.Rect(intersection[0]-14, intersection[1]-14, 28, 28)
+            intersection_rect = pygame.Rect(intersection[0]-14,
+                                            intersection[1]-14,
+                                            28,
+                                            28)
             tiles[position + 1] = intersection_rect
 
             if positions[position+1][1] != nmm.EMPTY:
                 if positions[position+1][1] == nmm.USER:
-                    pygame.draw.circle(surface=screen, color=white, center=intersection, radius=14)
+                    pygame.draw.circle(surface=screen,
+                                       color=white,
+                                       center=intersection,
+                                       radius=14)
                 elif positions[position+1][1] == nmm.AI:
-                    pygame.draw.circle(surface=screen, color=black, center=intersection, radius=14)
+                    pygame.draw.circle(surface=screen,
+                                       color=black,
+                                       center=intersection,
+                                       radius=14)
             else:
-                pygame.draw.circle(surface=screen, color=gold, center=intersection, radius=14)
+                pygame.draw.circle(surface=screen,
+                                   color=gold,
+                                   center=intersection,
+                                   radius=14)
 
-        game_over = nmm.terminal(BOARD, USER_PIECES, AI_PIECES, REMAINING_USER_PIECES, REMAINING_AI_PIECES)
-
+        game_over = nmm.terminal(BOARD,
+                                 USER_PIECES,
+                                 AI_PIECES,
+                                 REMAINING_USER_PIECES,
+                                 REMAINING_AI_PIECES)
 
         # gameplay titles
         if game_over:
-            winner = nmm.winner(BOARD, USER_PIECES, AI_PIECES, REMAINING_USER_PIECES, REMAINING_AI_PIECES)
+            winner = nmm.winner(BOARD,
+                                USER_PIECES,
+                                AI_PIECES,
+                                REMAINING_USER_PIECES,
+                                REMAINING_AI_PIECES)
             if winner is None:
                 title = "Game Over: TIE."
             elif winner == nmm.USER:
@@ -213,21 +234,24 @@ while True:
             r_ai_piecesRect = ai_pieces.get_rect()
             r_ai_piecesRect.center = (550, 400)
             screen.blit(r_ai_pieces, r_ai_piecesRect)
-        
+
         title = largeFont.render(title, True, gold)
         titleRect = title.get_rect()
         titleRect.center = (300, 50)
         screen.blit(title, titleRect)
 
-
         # check for AI move
         if PLAYER == 2 and not game_over:
             if AI_PIECES > 0:
-                # move = random.choice([value[0] for value in playable_positions.values()])
-                move = nmm.minimax(BOARD, DIFFICULTY, PLAYER, USER_PIECES, AI_PIECES)
+                move = nmm.minimax(BOARD,
+                                   DIFFICULTY,
+                                   PLAYER,
+                                   USER_PIECES,
+                                   AI_PIECES)
 
                 if nmm.check_triple(BOARD, move, PLAYER):
-                    choice = random.choice([value[0] for value in user_positions.values()])
+                    choice = random.choice(
+                        [value[0] for value in user_positions.values()])
                     BOARD = nmm.remove(BOARD, choice, PLAYER)
                     REMAINING_USER_PIECES -= 1
 
@@ -238,19 +262,20 @@ while True:
             # change player
             PLAYER = 3 - PLAYER
 
-
         # check for user move
         click, _, _ = pygame.mouse.get_pressed()
         if click and PLAYER == 1 and not game_over:
             mouse = pygame.mouse.get_pos()
             if USER_PIECES > 0:
                 for position in positions:
-                    if (positions[position][1] == nmm.EMPTY and tiles[position].collidepoint(mouse)):
-                        
+                    if ((positions[position][1] == nmm.EMPTY and
+                            tiles[position].collidepoint(mouse))):
+
                         action = positions[position][0]
                         # Check for triple
                         if nmm.check_triple(BOARD, action, PLAYER):
-                            choice = random.choice([value[0] for value in ai_positions.values()])
+                            choice = random.choice(
+                                [value[0] for value in ai_positions.values()])
                             BOARD = nmm.remove(BOARD, choice, PLAYER)
                             REMAINING_AI_PIECES -= 1
 
@@ -260,7 +285,7 @@ while True:
 
                         # Change player
                         PLAYER = 3 - PLAYER
-                        
+
             else:
                 ...
 
