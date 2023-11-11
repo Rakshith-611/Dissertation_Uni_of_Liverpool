@@ -157,3 +157,16 @@ def test_board_pieces():
     board = nmm.result(board, (6, 6), AI)
     assert nmm.board_pieces(board) == ({1: [(0, 0), USER]},
                                        {24: [(6, 6), AI]})
+    
+
+def test_remove():
+    """
+    Tests for removing a piece from the game board
+    """
+    board = nmm.initial_state()
+    board = nmm.result(board, (0, 0), USER)
+    assert nmm.remove(board, (0, 0), AI) == nmm.initial_state()
+
+    board = nmm.initial_state()
+    board = nmm.result(board, (6, 6), AI)
+    assert nmm.remove(board, (6, 6), USER) == nmm.initial_state()
