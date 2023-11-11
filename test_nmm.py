@@ -170,3 +170,25 @@ def test_remove():
     board = nmm.initial_state()
     board = nmm.result(board, (6, 6), AI)
     assert nmm.remove(board, (6, 6), USER) == nmm.initial_state()
+
+
+def test_result():
+    """
+    Tests for updating the state of the game after playing a move
+    """
+    board = nmm.initial_state()
+    assert nmm.result(board, (0, 0), USER) == [[USER, "$", "$", EMPTY, "$", "$", EMPTY],
+                                               ["$", EMPTY, "$", EMPTY, "$", EMPTY, "$"],
+                                               ["$", "$", EMPTY, EMPTY, EMPTY, "$", "$"],
+                                               [EMPTY, EMPTY, EMPTY, "$", EMPTY, EMPTY, EMPTY],
+                                               ["$", "$", EMPTY, EMPTY, EMPTY, "$", "$"],
+                                               ["$", EMPTY, "$", EMPTY, "$", EMPTY, "$"],
+                                               [EMPTY, "$", "$", EMPTY, "$", "$", EMPTY]]
+    
+    assert nmm.result(board, (6, 6), AI) == [[EMPTY, "$", "$", EMPTY, "$", "$", EMPTY],
+                                             ["$", EMPTY, "$", EMPTY, "$", EMPTY, "$"],
+                                             ["$", "$", EMPTY, EMPTY, EMPTY, "$", "$"],
+                                             [EMPTY, EMPTY, EMPTY, "$", EMPTY, EMPTY, EMPTY],
+                                             ["$", "$", EMPTY, EMPTY, EMPTY, "$", "$"],
+                                             ["$", EMPTY, "$", EMPTY, "$", EMPTY, "$"],
+                                             [EMPTY, "$", "$", EMPTY, "$", "$", AI]] 
