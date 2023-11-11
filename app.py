@@ -34,6 +34,7 @@ BOARD = nmm.initial_state()
 # AI_PIECES -= 1
 # REMAINING_AI_PIECES += 1
 # REMAINING_USER_PIECES += 1
+
 # Calculated intersection positions
 intersections = [(130, 130), (300, 130), (470, 130),
                  (192, 192), (300, 192), (408, 192),
@@ -77,7 +78,6 @@ while True:
         buttonWidth = width / 2
         button_height = 50
         button_x = (width - buttonWidth) / 2
-        # button_y = ...
 
         # draw buttons
         beginnerButton = pygame.Rect(button_x, 300, buttonWidth, button_height)
