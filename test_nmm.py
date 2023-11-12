@@ -228,10 +228,31 @@ def test_winner():
     """
     board = nmm.initial_state()
 
-    assert nmm.winner(board, 9, 9, 0, 0) == EMPTY
+    assert nmm.winner(board, 9, 9, 0, 0) == None
 
-    assert nmm.winner(board, 0, 0, 3, 3) == EMPTY
+    assert nmm.winner(board, 0, 0, 3, 3) == None
 
     assert nmm.winner(board, 0, 0, 2, 3) == AI
 
     assert nmm.winner(board, 0, 0, 3, 2) == USER
+
+
+def test_terminal():
+    """
+    Tests for checking if the game has reached its end or not
+    """
+    board = nmm.initial_state()
+
+    assert nmm.terminal(board, 0, 1, 9, 8) == False
+
+    assert nmm.terminal(board, 1, 0, 8, 9) == False
+
+    assert nmm.terminal(board, 0, 0, 3, 3) == False
+
+    assert nmm.terminal(board, 0, 0, 3, 2) == True
+
+    assert nmm.terminal(board, 0, 0, 2, 3) == True
+
+    assert nmm.terminal(board, 2, 2, 0, 0) == True
+
+    assert nmm.terminal(board, 3, 3, 0, 0) == False
