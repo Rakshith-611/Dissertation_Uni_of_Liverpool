@@ -119,7 +119,7 @@ def winner(board, user_pieces, ai_pieces, r_user_pieces, r_ai_pieces):
     # can't have a winner until total remaining pieces is still 3 or more
     if user_pieces > 0 or ai_pieces > 0:
         if (((user_pieces + r_user_pieces) > 2) or
-                ((ai_pieces + r_ai_pieces) > 3)):
+                ((ai_pieces + r_ai_pieces) > 2)):
             return None
 
     else:
