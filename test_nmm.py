@@ -228,13 +228,32 @@ def test_winner():
     """
     board = nmm.initial_state()
 
-    assert nmm.winner(board, 9, 9, 0, 0) == None
+    assert not nmm.winner(board, 9, 9, 0, 0)
 
-    assert nmm.winner(board, 0, 0, 3, 3) == None
+    assert not nmm.winner(board, 0, 0, 3, 3)
 
     assert nmm.winner(board, 0, 0, 2, 3) == AI
 
     assert nmm.winner(board, 0, 0, 3, 2) == USER
+
+
+def test_check_double():
+    """
+    Tests for checking if two consecutive moves are made by the same player
+    """
+    board = nmm.initial_state()
+    board = nmm.result(board, (0, 0), USER)
+    board = nmm.result(board, (6, 6), AI)
+
+    assert nmm.check_double(board, (0, 3), USER)
+    assert nmm.check_double(board, (0, 6), USER)
+    assert nmm.check_double(board, (3, 0), USER)
+    assert nmm.check_double(board, (6, 0), USER)
+
+    assert nmm.check_double(board, (6, 0), AI)
+    assert nmm.check_double(board, (6, 3), AI)
+    assert nmm.check_double(board, (0, 6), AI)
+    assert nmm.check_double(board, (3, 6), AI)
 
 
 def test_terminal():
