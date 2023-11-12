@@ -250,10 +250,33 @@ def test_check_double():
     assert nmm.check_double(board, (3, 0), USER)
     assert nmm.check_double(board, (6, 0), USER)
 
+    assert not nmm.check_double(board, (1, 3), USER)
+    assert not nmm.check_double(board, (2, 3), USER)
+
     assert nmm.check_double(board, (6, 0), AI)
     assert nmm.check_double(board, (6, 3), AI)
     assert nmm.check_double(board, (0, 6), AI)
     assert nmm.check_double(board, (3, 6), AI)
+
+    assert not nmm.check_double(board, (4, 3), AI)
+    assert not nmm.check_double(board, (5, 3), AI)
+
+
+def test_check_triple():
+    """
+    Tests for checking if three consecutive moves are made by the same player
+    """
+    board = nmm.initial_state()
+    board = nmm.result(board, (0, 0), USER)
+    board = nmm.result(board, (6, 6), AI)
+    board = nmm.result(board, (3, 0), USER)
+    board = nmm.result(board, (3, 6), AI)
+
+    assert nmm.check_triple(board, (6, 0), USER)
+    assert nmm.check_triple(board, (0, 6), AI)
+
+    assert not nmm.check_triple(board, (0, 6), USER)
+    assert not nmm.check_triple(board, (6, 0), AI)
 
 
 def test_terminal():
