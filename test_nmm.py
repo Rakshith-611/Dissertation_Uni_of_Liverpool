@@ -285,16 +285,38 @@ def test_terminal():
     """
     board = nmm.initial_state()
 
-    assert nmm.terminal(board, 0, 1, 9, 8) == False
+    assert not nmm.terminal(board, 0, 1, 9, 8)
 
-    assert nmm.terminal(board, 1, 0, 8, 9) == False
+    assert not nmm.terminal(board, 1, 0, 8, 9)
 
-    assert nmm.terminal(board, 0, 0, 3, 3) == False
+    assert not nmm.terminal(board, 0, 0, 3, 3)
 
-    assert nmm.terminal(board, 0, 0, 3, 2) == True
+    assert nmm.terminal(board, 0, 0, 3, 2)
 
-    assert nmm.terminal(board, 0, 0, 2, 3) == True
+    assert nmm.terminal(board, 0, 0, 2, 3)
 
-    assert nmm.terminal(board, 2, 2, 0, 0) == True
+    assert nmm.terminal(board, 2, 2, 0, 0)
 
-    assert nmm.terminal(board, 3, 3, 0, 0) == False
+    assert not nmm.terminal(board, 3, 3, 0, 0)
+
+
+def test_utility():
+    """
+    Tests for calculating utility of a state in the game
+    """
+    board = nmm.initial_state()
+
+    assert nmm.utility(board, (0, 0), USER) == 0
+    assert nmm.utility(board, (6, 6), AI) == 0
+
+    board = nmm.result(board, (0, 0), USER)
+    board = nmm.result(board, (6, 6), AI)
+
+    assert nmm.utility(board, (3, 0), USER) == 0.5
+    assert nmm.utility(board, (3, 6), AI) == -0.5
+
+    board = nmm.result(board, (3, 0), USER)
+    board = nmm.result(board, (3, 6), AI)
+
+    assert nmm.utility(board, (6, 0), USER) == 1
+    assert nmm.utility(board, (0, 6), AI) == -1
